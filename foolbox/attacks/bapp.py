@@ -520,7 +520,7 @@ class BoundaryAttackPlusPlus(Attack):
     def log_step(self, step, distance, message='', always=False):
         if not always and step % self.log_every_n_steps != 0:
             return
-        print('Step {}: {:.5e} {}'.format(
+        print('MyStep {}: {:.5e} {}'.format(
             step,
             distance,
             message))
