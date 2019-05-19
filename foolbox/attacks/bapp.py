@@ -520,10 +520,11 @@ class BoundaryAttackPlusPlus(Attack):
     def log_step(self, step, distance, message='', always=False):
         if not always and step % self.log_every_n_steps != 0:
             return
-        print('MyStep {}: {:.5e} {}'.format(
+        print('Step {}: {:.5e} {}'.format(
             step,
             distance,
             message))
+        print("queries: {}".format(self._default_model.queries))
 
     def log_time(self):
         t_total = time.time() - self.t_initial
