@@ -10,6 +10,7 @@ from .base import call_decorator
 from ..distances import MSE, Linf
 import numpy as np
 import math
+import csv
 
 
 class BoundaryAttackPlusPlus(Attack):
