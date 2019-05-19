@@ -45,7 +45,7 @@ class BoundaryAttackPlusPlus(Attack):
             input_or_adv,
             label=None,
             unpack=True,
-            iterations=64,
+            iterations=10000,
             initial_num_evals=100,
             max_num_evals=10000,
             stepsize_search='grid_search',
@@ -54,7 +54,8 @@ class BoundaryAttackPlusPlus(Attack):
             batch_size=256,
             internal_dtype=np.float64,
             log_every_n_steps=1,
-            verbose=False):
+            verbose=False,
+            max_queries = 10000):
         """Applies Boundary Attack++.
 
         Parameters
@@ -113,6 +114,7 @@ class BoundaryAttackPlusPlus(Attack):
         self.internal_dtype = internal_dtype
         self.log_every_n_steps = log_every_n_steps
         self.verbose = verbose
+        self.max_queries = max_queries
 
         # Set constraint based on the distance.
         if self._default_distance == MSE:
@@ -311,6 +313,10 @@ class BoundaryAttackPlusPlus(Attack):
             message = ' (took {:.5f} seconds)'.format(t2 - t0)
             self.log_step(step, distance, message)
             sys.stdout.flush()
+
+            if self._default_model.queries >= self.max_queries:
+                print("stopped attack because max_queries was reached")
+                break
 
         # ===========================================================
         # Log overall runtime
