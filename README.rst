@@ -1,3 +1,5 @@
+build: https://stackoverflow.com/questions/26059111/build-a-wheel-egg-and-all-dependencies-for-a-python-project
+
 .. image:: https://readthedocs.org/projects/foolbox/badge/?version=latest
     :target: https://foolbox.readthedocs.io/en/latest/
 
