@@ -518,13 +518,15 @@ class BoundaryAttackPlusPlus(Attack):
         return epsilon
 
     def log_step(self, step, distance, message='', always=False):
-        if not always and step % self.log_every_n_steps != 0:
+        with open('attack_log.csv', 'a+', newline='') as f:
+            writer = csv.writer(f, delimiter=',')
+            writer.writerow([step, self._default_model.queries, distance])
+        if not always and step % self.log_every_n_steps!=0:
             return
         print('Step {}: {:.5e} {}'.format(
             step,
             distance,
             message))
-        print("queries: {}".format(self._default_model.queries))
 
     def log_time(self):
         t_total = time.time() - self.t_initial
