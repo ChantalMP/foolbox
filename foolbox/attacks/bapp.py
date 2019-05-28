@@ -55,7 +55,7 @@ class BoundaryAttackPlusPlus(Attack):
             internal_dtype=np.float64,
             log_every_n_steps=1,
             verbose=False,
-            max_queries = 10000):
+            max_queries = 10000,log_name='attack_log.csv'):
         """Applies Boundary Attack++.
 
         Parameters
@@ -115,6 +115,7 @@ class BoundaryAttackPlusPlus(Attack):
         self.log_every_n_steps = log_every_n_steps
         self.verbose = verbose
         self.max_queries = max_queries
+        self.log_name = log_name
 
         # Set constraint based on the distance.
         if self._default_distance == MSE:
@@ -525,7 +526,7 @@ class BoundaryAttackPlusPlus(Attack):
         return epsilon
 
     def log_step(self, step, distance, message='', always=False):
-        with open('attack_log.csv', 'a+', newline='') as f:
+        with open(self.log_name, 'a+', newline='') as f:
             writer = csv.writer(f, delimiter=',')
             writer.writerow([step, self._default_model.queries, distance])
         if not always and step % self.log_every_n_steps!=0:
