@@ -55,7 +55,8 @@ class BoundaryAttackPlusPlus(Attack):
             internal_dtype=np.float64,
             log_every_n_steps=1,
             verbose=False,
-            max_queries = 10000,log_name='attack_log.csv'):
+            max_queries = 10000,log_name='attack_log.csv',
+            stay_at_best = False):
         """Applies Boundary Attack++.
 
         Parameters
@@ -116,6 +117,7 @@ class BoundaryAttackPlusPlus(Attack):
         self.verbose = verbose
         self.max_queries = max_queries
         self.log_name = log_name
+        self.stay_at_best = stay_at_best
 
         # Set constraint based on the distance.
         if self._default_distance == MSE:
@@ -238,6 +240,9 @@ class BoundaryAttackPlusPlus(Attack):
         # log starting point
         self.log_step(0, distance)
 
+        best_adversarial = perturbed
+        best_distance = dist
+
         for step in range(1, iterations + 1):
 
             t0 = time.time()
@@ -301,6 +306,16 @@ class BoundaryAttackPlusPlus(Attack):
 
             # compute new distance.
             dist = self.compute_distance(perturbed, original)
+
+            #MY CODE: stay with best distance
+            if self.stay_at_best:
+                if dist <= best_distance:
+                    best_distance = dist
+                    best_adversarial = perturbed
+                else:
+                    perturbed = best_adversarial
+                    dist = best_distance
+
 
             # ===========================================================
             # Log the step
